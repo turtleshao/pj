@@ -21,6 +21,10 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.example.crackme.key"
+            android:name="com.example.crackme.myprovider"
+            android:exported="true" />
     </application>
 
 </manifest>
