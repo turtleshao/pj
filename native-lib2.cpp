@@ -7,72 +7,74 @@
 
 #define JNIREG_CLASS "com/example/crackme/mActivity"
 extern "C" JNIEXPORT jboolean JNICALL M2354C(JNIEnv *env, jobject thiz, jstring str1,
-                                  jstring str2) {
+                                             jstring str2) {
     jboolean isCopy= static_cast<jboolean>(false);
-    char* s1= (char *) env->GetStringChars(str1, &isCopy);
-    char* s2= (char *) env->GetStringChars(str2, &isCopy);
-    int len=env->GetStringLength(str2);
+    int len=env->GetStringUTFLength(str2),lem=env->GetStringUTFLength(str1);
+    if(lem!=len){
+        return static_cast<jboolean>(false);
+    }
+    char* s1= (char *) env->GetStringUTFChars(str1, &isCopy);
+    char* s2= (char *) env->GetStringUTFChars(str2, &isCopy);
     for(int i=0;i<len;i++){
         if((i%2)==0 && s1[i]==s2[i])
             continue;
-        if((i%2)==1 && s1[1]=='0')
+        if((i%2)==1 && s1[i]==(s2[i]+1))
             continue;
-        env->ReleaseStringChars(str1, reinterpret_cast<const jchar *>(s1));
-        env->ReleaseStringChars(str2, reinterpret_cast<const jchar *>(s2));
+        env->ReleaseStringUTFChars(str1, reinterpret_cast<const char *>(s1));
+        env->ReleaseStringUTFChars(str2, reinterpret_cast<const char *>(s2));
         return static_cast<jboolean>(false);
     }
-    env->ReleaseStringChars(str1, reinterpret_cast<const jchar *>(s1));
-    env->ReleaseStringChars(str2, reinterpret_cast<const jchar *>(s2));
+    env->ReleaseStringUTFChars(str1, reinterpret_cast<const char *>(s1));
+    env->ReleaseStringUTFChars(str2, reinterpret_cast<const char *>(s2));
     return static_cast<jboolean>(true);
 }
 extern "C" JNIEXPORT jboolean JNICALL M2352C(JNIEnv *env, jobject thiz, jstring jstring1,jstring jstring2) {
     jboolean isCopy= static_cast<jboolean>(false);
-    char* a= (char *) env->GetStringChars(jstring1, &isCopy);
-    char* b= (char *) env->GetStringChars(jstring2, &isCopy);
-    if(env->GetStringLength(jstring1)!=32||env->GetStringLength(jstring2)!=16){
+    char* a= (char *) env->GetStringUTFChars(jstring1, &isCopy);
+    char* b= (char *) env->GetStringUTFChars(jstring2, &isCopy);
+    if(env->GetStringUTFLength(jstring1)!=16||env->GetStringUTFLength(jstring2)!=32){
         return static_cast<jboolean>(false);
     }
     unsigned char c[32];
     unsigned char d[16];
     unsigned char r[48];
-    unsigned char m[48]={(unsigned char)0x171,(unsigned char)0x126,(unsigned char)0x129,(unsigned char)0x38,(unsigned char)0x85,\
-                        (unsigned char)0x0,(unsigned char)0x179,(unsigned char)0x87,(unsigned char)0x0,(unsigned char)0x231,(unsigned char)0x127,\
-                        (unsigned char)0x128,(unsigned char)0x143,(unsigned char)0x161,(unsigned char)0x128,(unsigned char)0x172,(unsigned char)0x124,\
-                        (unsigned char)0x129,(unsigned char)0x230,(unsigned char)0x77,(unsigned char)0x0,(unsigned char)0x101,(unsigned char)0x147,\
-                        (unsigned char)0x129,(unsigned char)0x252,(unsigned char)0x74,(unsigned char)0x1,(unsigned char)0x71,(unsigned char)0x61,\
-                        (unsigned char)0x0,(unsigned char)0x99,(unsigned char)0x63,(unsigned char)0x0,(unsigned char)0x123,(unsigned char)0x138,\
-                        (unsigned char)0x129,(unsigned char)0x244,(unsigned char)0x106,(unsigned char)0x1,(unsigned char)0x249,(unsigned char)0x85,\
-                        (unsigned char)0x1,(unsigned char)0x136,(unsigned char)0x128,(unsigned char)0x129,(unsigned char)0x68,(unsigned char)0x126,\
-                        (unsigned char)0x129};
+    unsigned char m[48]={(unsigned char)183,(unsigned char)223,(unsigned char)155,(unsigned char)116,(unsigned char)200,(unsigned char)104,\
+                        (unsigned char)90,(unsigned char)116,(unsigned char)119,(unsigned char)238,(unsigned char)138,(unsigned char)139,\
+                        (unsigned char)6,(unsigned char)194,(unsigned char)191,(unsigned char)53,(unsigned char)104,(unsigned char)32,\
+                        (unsigned char)57,(unsigned char)68,(unsigned char)23,(unsigned char)43,(unsigned char)106,(unsigned char)81,\
+                        (unsigned char)104,(unsigned char)196,(unsigned char)117,(unsigned char)138,(unsigned char)140,(unsigned char)119,\
+                        (unsigned char)17,(unsigned char)78,(unsigned char)240,(unsigned char)69,(unsigned char)135,(unsigned char)65,\
+                        (unsigned char)6,(unsigned char)255,(unsigned char)233,(unsigned char)147,(unsigned char)6,(unsigned char)169,\
+                        (unsigned char)57,(unsigned char)26,(unsigned char)248,(unsigned char)125,(unsigned char)200,(unsigned char)196};
     for(int i=0;i<32;i++){
-        if(a[i]>='0'&&a[i]<='9')
-            c[i]= static_cast<unsigned char>(a[i] - '0');
-        if(a[i]>='A'&&a[i]<='F')
-            c[i]= static_cast<unsigned char>(a[i] - 'A'+10);
+        if(b[i]>='0'&&b[i]<='9')
+            c[i]= static_cast<unsigned char>(b[i] - '0');
+        if(b[i]>='a'&&b[i]<='f')
+            c[i]= static_cast<unsigned char>(b[i] - 'a'+10);
     }
     for(int i=0;i<16;i++){
-        d[i]= static_cast<unsigned char>(c[i * 2] * 10 + c[i * 2 + 1]);
+        d[i]= static_cast<unsigned char>(c[i * 2] * 16 + c[i * 2 + 1]);
     }
     for(int i=0;i<16;i++){
-        c[i*2]= static_cast<unsigned char>(b[i]);
+        c[i*2]= static_cast<unsigned char>(a[i]);
         srand(d[i]);
         c[i*2+1]= static_cast<unsigned char>(rand() % 256);
     }
     for(int i=0;i<16;i++){
-        r[i*3]=c[i*2]-c[i*2+1];
-        r[i*3+1]=(c[i*2]>>1)+(c[i*2+1]>>1);
-        r[i*3+2]= (c[i * 2] & (unsigned char)0x81) | ((c[i * 2 + 1] &(unsigned char) 0x81) >> 4);
+        r[i*3]=c[i*2]-c[i*2+1]+d[i];
+        r[i*3+1]=(c[i*2]>>1)+(c[i*2+1]>>1)+d[i];
+        r[i*3+2]= ((c[i * 2 + 1] & (unsigned char)0x81) | ((c[i * 2] &(unsigned char) 0x81) >> 4))+d[i];
     }
     for(int i=0;i<48;i++){
         if(r[i]==m[i]){
             continue;
         }
-        env->ReleaseStringChars(jstring1, reinterpret_cast<const jchar *>(a));
-        env->ReleaseStringChars(jstring2, reinterpret_cast<const jchar *>(b));
+        env->ReleaseStringUTFChars(jstring1, reinterpret_cast<const char *>(a));
+        env->ReleaseStringUTFChars(jstring2, reinterpret_cast<const char *>(b));
         return static_cast<jboolean>(false);
     }
-    env->ReleaseStringChars(jstring1, reinterpret_cast<const jchar *>(a));
-    env->ReleaseStringChars(jstring2, reinterpret_cast<const jchar *>(b));
+    env->ReleaseStringUTFChars(jstring1, reinterpret_cast<const char *>(a));
+    env->ReleaseStringUTFChars(jstring2, reinterpret_cast<const char *>(b));
     return static_cast<jboolean>(true);
 }
 static JNINativeMethod gMethods[]={
