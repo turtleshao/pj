@@ -96,11 +96,9 @@ static int registerNatives(JNIEnv *env){
     return JNI_TRUE;
 }
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM* vm,void* reversed){
-    /*
-    先不放这个，模拟器上这句有点问题
-    if(ptrace(PTRACE_TRACEME)==-1){
+    if(ptrace(PTRACE_TRACEME,0,0,0)==-1){
         exit(0);
-    }*/
+    }
     JNIEnv* env=NULL;
     if(((vm)->GetEnv((void**)&env,JNI_VERSION_1_4))!=JNI_OK){
         return -1;
