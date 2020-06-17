@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">crackMe</string>
+    <string name="flag">Flag:</string>
+    <string name="ok">OK</string>
+    <string name="input">Input</string>
+    <string name="flag_msg">Flag is not hereHaHaHa.</string>
+    <string name="tip1">Tips:If you are using a simulator,you\'d better not choose AS.</string>
+    <string name="tip2">If you are using a real machine,help yourself!</string>
+</resources>
